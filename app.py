@@ -101,10 +101,13 @@ def get_info_today(event):
                     "afternoon_story":string_afternoon,"afternoon_youtube":pray_afternoon_youtube_url,
                     }
             json.dump(data, jsonfile, indent=4, ensure_ascii=False)
-
+    echo_text = data["date"] +  "\n" + data["author"] + "\n" + \
+            data["morning_story"] +  "\n" + data["morning_youtube"] +  "\n" + \
+            data["noon_story"] +  "\n" + data["noon_youtube"] +  "\n" + \
+            data["afternoon_story"] +  "\n" + data["afternoon_youtube"]
     line_bot_api.reply_message(
     event.reply_token,
-    TextSendMessage(text=data.values())
+    TextSendMessage(text=echo_text)
     )
 
 if __name__ == "__main__":
