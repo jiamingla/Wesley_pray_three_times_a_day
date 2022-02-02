@@ -101,12 +101,10 @@ def get_info_today(event):
                     "afternoon_story":string_afternoon,"afternoon_youtube":pray_afternoon_youtube_url,
                     }
             json.dump(data, jsonfile, indent=4, ensure_ascii=False)
-    string = ""
-    for e in data:
-        string = string + str(e) + "\n"
+
     line_bot_api.reply_message(
     event.reply_token,
-    TextSendMessage(text=string)
+    TextSendMessage(text=data.values())
     )
 
 if __name__ == "__main__":
