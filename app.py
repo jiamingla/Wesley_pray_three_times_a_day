@@ -47,7 +47,11 @@ def callback():
 def get_info_today(event):
     today = datetime.today().strftime("%Y-%m-%d")
     with open('today_data.json', 'r+', encoding='utf8', newline='', closefd=True) as jsonfile:
-        data = json.load(jsonfile)
+        data = {}
+        try:
+            data = json.load(jsonfile)
+        except json.JSONDecodeError:
+            data["date"] = ""
         if(data["date"] != today):
             r = requests.get(f'https://methodist.org.tw/{today}/')
             soup = BeautifulSoup(r.text, 'html.parser')
