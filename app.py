@@ -4,6 +4,10 @@ from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
+from bs4 import BeautifulSoup
+from datetime import date, datetime
+
+import requests
 
 import configparser
 
@@ -38,23 +42,16 @@ def callback():
 
 # 學你說話
 @handler.add(MessageEvent, message=TextMessage)
-def pretty_echo(event):
+def get_info_today(event):
+    today = datetime.today().strftime("%Y-%m-%d")
+    r = requests.get(f'https://methodist.org.tw/{today}/')
+    soup = BeautifulSoup(r.text, 'html.parser')
+    info = soup.find("div", class_ = "column_attr clearfix")
     
-    if event.source.user_id != "Udeadbeefdeadbeefdeadbeefdeadbeef":
-        
-        # Phoebe 愛唱歌
-        pretty_note = '♫♪♬'
-        pretty_text = ''
-        
-        for i in event.message.text:
-        
-            pretty_text += i
-            pretty_text += random.choice(pretty_note)
+    line_bot_api.reply_message(
+        event.reply_token,
+        TextSendMessage(text=info.text)
+    )
     
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=pretty_text)
-        )
-
 if __name__ == "__main__":
     app.run()
