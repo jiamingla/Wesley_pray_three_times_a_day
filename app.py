@@ -46,9 +46,9 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def get_info_today(event):
     today = datetime.today().strftime("%Y-%m-%d")
-    with open('today_data.json', 'w+', encoding='utf8', newline='', closefd=True) as jsonfile:
+    with open('today_data.json', 'r+', encoding='utf8', newline='', closefd=True) as jsonfile:
         data = json.load(jsonfile)
-        if(data.date != today):
+        if(data["date"] != today):
             r = requests.get(f'https://methodist.org.tw/{today}/')
             soup = BeautifulSoup(r.text, 'html.parser')
             info = soup.find("div", class_ = "column_attr clearfix")
