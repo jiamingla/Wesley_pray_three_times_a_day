@@ -113,5 +113,9 @@ def get_info_today(event):
     TextSendMessage(text=echo_text)
     )
 
+@app.route("/", methods=['GET'])
+def index():
+    return '這是Line bot，還敢偷看阿'
+
 if __name__ == "__main__":
     app.run()
