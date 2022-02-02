@@ -7,6 +7,8 @@ from linebot.models import MessageEvent, TextMessage, TextSendMessage
 from bs4 import BeautifulSoup
 from datetime import date, datetime
 
+import pytz
+
 import requests
 
 import configparser
@@ -45,7 +47,8 @@ def callback():
 # 當有人傳訊息給我的時候會觸發這個
 @handler.add(MessageEvent, message=TextMessage)
 def get_info_today(event):
-    today = datetime.today().strftime("%Y-%m-%d")
+    taipei_time = pytz.timezone('Asia/Taipei') # 抓時間的寫法之後再看要不要改
+    today = datetime.now(tz=taipei_time).strftime("%Y-%m-%d")
     with open('today_data.json', 'r+', encoding='utf8', newline='', closefd=True) as jsonfile:
         data = {}
         try:
