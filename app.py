@@ -34,11 +34,11 @@ def callback():
 
     body = request.get_data(as_text=True)
     app.logger.info("Request body: " + body)
-    
+
     try:
         print(body, signature)
         handler.handle(body, signature)
-        
+
     except InvalidSignatureError:
         abort(400)
 
@@ -60,6 +60,7 @@ def get_info_today(event):
             # 有時候還沒更新第一天的部分，就先給昨天的，這之後再改吧
             if(r.status_code == 404):
                 today = (datetime.now(tz=taipei_time) - timedelta(days=1)).strftime("%Y-%m-%d")
+                print(today)
                 r = requests.get(f'https://methodist.org.tw/{today}/')
             soup = BeautifulSoup(r.text, 'html.parser')
             info = soup.find("div", class_ = "column_attr clearfix")
