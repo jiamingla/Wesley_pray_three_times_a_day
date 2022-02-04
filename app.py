@@ -104,7 +104,7 @@ def get_info_today(event):
             pray_noon_youtube_url = pray_youtube_url[1].get('src')
             pray_afternoon_youtube_url = pray_youtube_url[2].get('src')
 
-            data = {"date":today,"author":author,
+            data = {"date":today_string,"author":author,
                     "morning_story":string_morning,"morning_youtube":pray_morning_youtube_url,
                     "noon_story":string_noon,"noon_youtube":pray_noon_youtube_url,
                     "afternoon_story":string_afternoon,"afternoon_youtube":pray_afternoon_youtube_url,
