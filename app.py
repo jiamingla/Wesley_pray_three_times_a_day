@@ -59,8 +59,9 @@ def get_info_today(event):
             r = requests.get(f'https://methodist.org.tw/{today}/')
             # 有時候還沒更新第一天的部分，就先給昨天的，這之後再改吧
             if(r.status_code == 404):
-                today = (datetime.now(tz=taipei_time) - timedelta(days=1)).strftime("%Y-%m-%d")
-                print(today)
+                set_time = datetime.now(tz=taipei_time) - timedelta(days=1)
+                today = set_time.strftime("%Y-%m-%d")
+                print(set_time)
                 r = requests.get(f'https://methodist.org.tw/{today}/')
             soup = BeautifulSoup(r.text, 'html.parser')
             info = soup.find("div", class_ = "column_attr clearfix")
