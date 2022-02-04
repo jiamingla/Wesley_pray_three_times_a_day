@@ -5,7 +5,7 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 from bs4 import BeautifulSoup
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 
 import pytz
 
@@ -59,7 +59,7 @@ def get_info_today(event):
             r = requests.get(f'https://methodist.org.tw/{today}/')
             # 有時候還沒更新第一天的部分，就先給昨天的，這之後再改吧
             if(r.status_code == 404):
-                today = (datetime.now(tz=taipei_time) - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
+                today = (datetime.now(tz=taipei_time) - timedelta(days=1)).strftime("%Y-%m-%d")
                 r = requests.get(f'https://methodist.org.tw/{today}/')
             soup = BeautifulSoup(r.text, 'html.parser')
             info = soup.find("div", class_ = "column_attr clearfix")
