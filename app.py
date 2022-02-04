@@ -48,21 +48,21 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def get_info_today(event):
     taipei_time = pytz.timezone('Asia/Taipei') # 抓時間的寫法之後再看要不要改
-    today = datetime.now(tz=taipei_time).strftime("%Y-%m-%d")
+    today = datetime.now(tz=taipei_time)
+    today_string = today.strftime("%Y-%m-%d")
     with open('today_data.json', 'r+', encoding='utf8', newline='', closefd=True) as jsonfile:
         data = {}
         try:
             data = json.load(jsonfile)
         except json.JSONDecodeError:
             data["date"] = ""
-        if(data["date"] != today):
-            r = requests.get(f'https://methodist.org.tw/{today}/')
+        if(data["date"] != today_string):
+            r = requests.get(f'https://methodist.org.tw/{today_string}/')
             # 有時候還沒更新第一天的部分，就先給昨天的，這之後再改吧
-            if(r.status_code == 404):
-                set_time = datetime.now(tz=taipei_time) - timedelta(days=1)
-                today = set_time.strftime("%Y-%m-%d")
-                print(set_time)
-                r = requests.get(f'https://methodist.org.tw/{today}/')
+            while(r.status_code == 404):
+                today = today - timedelta(days=1)
+                today_string = today.strftime("%Y-%m-%d")
+                r = requests.get(f'https://methodist.org.tw/{today_string}/')
             soup = BeautifulSoup(r.text, 'html.parser')
             info = soup.find("div", class_ = "column_attr clearfix")
             info_contents = info.stripped_strings
